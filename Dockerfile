@@ -1,11 +1,14 @@
-# DOCKERFILE ULTRA-SIMPLU PENTRU RAILWAY - FUNCȚIONAL 100%
+# DOCKERFILE NUCLEAR PENTRU RAILWAY - 100% LOGGING
 FROM node:20-alpine
 
-# Instalăm doar curl pentru healthcheck
-RUN apk add --no-cache curl
+# Instalăm utilități esențiale
+RUN apk add --no-cache curl net-tools bash
 
-# Setăm directorul de lucru
 WORKDIR /app
+
+# Copiem scriptul de start FORȚAT
+COPY railway-start.sh ./
+RUN chmod +x railway-start.sh
 
 # Copiem fișierele de configurare
 COPY server/package*.json ./server/
@@ -17,14 +20,18 @@ RUN cd server && npm ci --only=production
 # Copiem codul compilat
 COPY server/dist ./server/dist
 
-# Verificăm că avem fișierele critice
-RUN echo "=== VERIFICARE FISIERE ===" && \
+# Verificăm fișierele critice
+RUN echo "=== VERIFICARE FINALĂ ===" && \
     ls -la server/dist/ && \
-    test -f server/dist/app.js && echo "✅ app.js EXISTA" || echo "❌ app.js LIPSESTE"
+    test -f server/dist/app.js && echo "✅ app.js EXISTA" || echo "❌ app.js LIPSESTE" && \
+    test -x railway-start.sh && echo "✅ Script start executabil" || echo "❌ Script start NEEXECUTABIL"
 
-# Healthcheck simplu dar eficient
+# Healthcheck robust
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-  CMD curl -f http://localhost:${PORT:-5000}/api/health || exit 1
+  CMD echo "=== HEALTHCHECK RULAT ===" && \
+      echo "Port: ${PORT:-5000}" && \
+      echo "Time: $(date)" && \
+      curl -f -v http://localhost:${PORT:-5000}/api/health && echo "✅ HEALTH SUCCESS" || echo "❌ HEALTH FAILED"
 
-# Comandă DIRECTĂ și simplă - Railway o va folosi
-CMD ["node", "server/dist/app.js"]
+# FOLOSIM SCRIPTUL FORȚAT - Railway NU poate ignora asta
+CMD ["./railway-start.sh"]

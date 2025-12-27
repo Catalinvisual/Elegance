@@ -60,12 +60,21 @@ const gallery_1 = __importDefault(require("./routes/gallery"));
 const newsletter_1 = __importDefault(require("./routes/newsletter"));
 dotenv_1.default.config();
 // LOGGING MASIV PENTRU RAILWAY DEBUGGING
+console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥');
 console.log('🔥🔥🔥 APP.TS PORNIT - RAILWAY DEBUGGING 🔥🔥🔥');
+console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥');
 console.log('📅 Data pornire:', new Date().toISOString());
 console.log('📂 __dirname:', __dirname);
 console.log('📂 process.cwd():', process.cwd());
 console.log('🔧 TOATE variabilele de mediu:', Object.keys(process.env).sort());
-console.log('🌐 PROCESS.ENV COMPLET:', process.env);
+console.log('🎯 PORT din process.env:', process.env.PORT);
+console.log('🎯 NODE_ENV din process.env:', process.env.NODE_ENV);
+console.log('🎯 RAILWAY variables:', {
+    RAILWAY_ENVIRONMENT: process.env.RAILWAY_ENVIRONMENT,
+    RAILWAY_PROJECT_ID: process.env.RAILWAY_PROJECT_ID,
+    RAILWAY_SERVICE_ID: process.env.RAILWAY_SERVICE_ID,
+    RAILWAY_DEPLOYMENT_ID: process.env.RAILWAY_DEPLOYMENT_ID
+});
 const app = (0, express_1.default)();
 const PORT = parseInt(process.env.PORT || '5000', 10);
 console.log('=== SERVER STARTUP DEBUG ===');
@@ -100,13 +109,38 @@ app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    console.log('🩺 Health check requested!');
-    res.status(200).json({
+    console.log('🩺 HEALTHCHECK REQUEST PRIMIT:', new Date().toISOString());
+    console.log('🩺 Request headers:', req.headers);
+    console.log('🩺 Request IP:', req.ip);
+    res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development',
         port: PORT,
-        clientBuildPath: path_1.default.join(__dirname, '../../client-build')
+        host: '0.0.0.0',
+        railway_vars: {
+            env: process.env.RAILWAY_ENVIRONMENT,
+            project: process.env.RAILWAY_PROJECT_ID,
+            service: process.env.RAILWAY_SERVICE_ID
+        }
+    });
+});
+// Endpoint de debug suplimentar
+app.get('/api/debug', (req, res) => {
+    console.log('🔍 DEBUG REQUEST:', new Date().toISOString());
+    res.json({
+        message: 'Server is running!',
+        timestamp: new Date().toISOString(),
+        port: PORT,
+        host: '0.0.0.0',
+        env: process.env.NODE_ENV,
+        railway_port: process.env.PORT,
+        cwd: process.cwd(),
+        __dirname: __dirname,
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        env_vars: Object.keys(process.env).sort()
     });
 });
 // Test endpoint
