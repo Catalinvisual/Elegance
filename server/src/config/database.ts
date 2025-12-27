@@ -5,9 +5,17 @@ dotenv.config();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+// Debug logging for database connection
+console.log('Database Configuration Check:');
+console.log(`- NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`- DATABASE_URL provided: ${!!process.env.DATABASE_URL}`);
+console.log(`- DB_HOST: ${process.env.DB_HOST}`);
+console.log(`- DB_NAME: ${process.env.DB_NAME}`);
+
 let sequelize: Sequelize;
 
 if (process.env.DATABASE_URL) {
+  console.log('Using DATABASE_URL connection strategy');
   // Railway provides DATABASE_URL
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
@@ -20,6 +28,7 @@ if (process.env.DATABASE_URL) {
     }
   });
 } else {
+  console.log('Using Individual Variables connection strategy');
   // Fallback to individual variables or SQLite for dev
   const options: Options = {
     database: process.env.DB_NAME || 'beauty_salon',
@@ -30,6 +39,12 @@ if (process.env.DATABASE_URL) {
     dialect: isProduction ? 'postgres' : 'sqlite',
     storage: !isProduction ? './database.sqlite' : undefined,
     logging: !isProduction ? console.log : false,
+    dialectOptions: isProduction ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : undefined,
     pool: {
       max: 5,
       min: 0,
