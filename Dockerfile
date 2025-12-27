@@ -4,17 +4,25 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy all source code first
-COPY . .
+# Copy package files first
+COPY package*.json ./
+COPY client/package*.json ./client/
+COPY server/package*.json ./server/
 
-# Install dependencies in root
+# Install root dependencies
 RUN npm install
 
 # Install client dependencies and build
-RUN cd client && npm install && npm run build
+WORKDIR /app/client
+RUN npm install && npm run build
 
-# Install server dependencies and build  
-RUN cd server && npm install && npm run build
+# Install server dependencies and build
+WORKDIR /app/server
+RUN npm install && npm run build
+
+# Go back to root and copy built files
+WORKDIR /app
+COPY . .
 
 # Expose port
 EXPOSE 5000
