@@ -2,14 +2,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copiere director rădăcină complet
-COPY . .
+# Copiere doar server (skip client build)
+COPY server/package*.json ./server/
+RUN cd server && npm install
+COPY server ./server
+RUN cd server && npm run build
 
-# Build client
-RUN cd client && npm ci && npm run build
-
-# Build server  
-RUN cd server && npm ci && npm run build
+# Copiere client static (dacă există deja build)
+COPY client/build ./client/build
 
 EXPOSE 5000
 
