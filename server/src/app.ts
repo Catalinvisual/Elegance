@@ -24,29 +24,22 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP to avoid React issues
+  crossOriginEmbedderPolicy: false
+}));
 app.use(compression());
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 1000 // Increased limit for debugging
 });
 app.use(limiter);
 
-// CORS configuration
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [process.env.CLIENT_URL || 'https://your-app.railway.app', 'https://your-domain.com']
-  : ['http://localhost:3000', 'http://localhost:3001'];
-
+// CORS configuration - Allow all for debugging/production fix
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins
   credentials: true
 }));
 
