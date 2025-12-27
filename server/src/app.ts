@@ -10,6 +10,9 @@ import { Client } from './models/Client';
 import { Service } from './models/Service';
 import { Appointment } from './models/Appointment';
 import { Admin } from './models/Admin';
+import { Newsletter } from './models/Newsletter';
+import { Gallery } from './models/Gallery';
+import { Subscriber } from './models/Subscriber';
 import authRoutes from './routes/auth';
 import serviceRoutes from './routes/services';
 import appointmentRoutes from './routes/appointments';
@@ -43,6 +46,12 @@ app.use(cors({
   credentials: true
 }));
 
+// Request logging middleware for debugging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -52,8 +61,15 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'healthy', 
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    port: PORT,
+    clientBuildPath: path.join(__dirname, '../../client-build')
   });
+});
+
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Server is working!', timestamp: new Date().toISOString() });
 });
 
 // Routes
@@ -72,6 +88,17 @@ app.use('/uploads', express.static('uploads'));
 const clientBuildPath = path.join(__dirname, '../../client-build');
 console.log('Serving static files from:', clientBuildPath);
 console.log('__dirname:', __dirname);
+
+// Check if client build directory exists
+const fs = require('fs');
+if (fs.existsSync(clientBuildPath)) {
+  console.log('Client build directory exists');
+  const files = fs.readdirSync(clientBuildPath);
+  console.log('Files in client-build:', files);
+} else {
+  console.error('Client build directory does NOT exist at:', clientBuildPath);
+}
+
 app.use(express.static(clientBuildPath, { 
   dotfiles: 'ignore',
   etag: false,
@@ -84,10 +111,7 @@ app.use(express.static(clientBuildPath, {
   }
 }));
 
-// Health check endpoint (moved up)
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -115,7 +139,7 @@ app.use((req, res, next) => {
 // This serves index.html for any route that doesn't match API or static files
 app.use((req, res) => {
   console.log('Catch-all handler for:', req.path);
-  const indexPath = path.join(__dirname, '../client-build', 'index.html');
+  const indexPath = path.join(__dirname, '../../client-build', 'index.html');
   console.log('Sending index.html from:', indexPath);
   res.sendFile(indexPath, (err) => {
     if (err) {
@@ -137,6 +161,9 @@ const startServer = async () => {
       await Admin.sync();
       await Service.sync();
       await Appointment.sync();
+      await Newsletter.sync();
+      await Gallery.sync();
+      await Subscriber.sync();
       
       console.log('Database synchronized.');
       

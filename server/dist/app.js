@@ -48,6 +48,9 @@ const Client_1 = require("./models/Client");
 const Service_1 = require("./models/Service");
 const Appointment_1 = require("./models/Appointment");
 const Admin_1 = require("./models/Admin");
+const Newsletter_1 = require("./models/Newsletter");
+const Gallery_1 = require("./models/Gallery");
+const Subscriber_1 = require("./models/Subscriber");
 const auth_1 = __importDefault(require("./routes/auth"));
 const services_1 = __importDefault(require("./routes/services"));
 const appointments_1 = __importDefault(require("./routes/appointments"));
@@ -75,6 +78,11 @@ app.use((0, cors_1.default)({
     origin: true, // Allow all origins
     credentials: true
 }));
+// Request logging middleware for debugging
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    next();
+});
 // Body parsing middleware
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
@@ -83,8 +91,14 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        port: PORT,
+        clientBuildPath: path_1.default.join(__dirname, '../../client-build')
     });
+});
+// Test endpoint
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Server is working!', timestamp: new Date().toISOString() });
 });
 // Routes
 app.use('/api/auth', auth_1.default);
@@ -100,6 +114,16 @@ app.use('/uploads', express_1.default.static('uploads'));
 const clientBuildPath = path_1.default.join(__dirname, '../../client-build');
 console.log('Serving static files from:', clientBuildPath);
 console.log('__dirname:', __dirname);
+// Check if client build directory exists
+const fs = require('fs');
+if (fs.existsSync(clientBuildPath)) {
+    console.log('Client build directory exists');
+    const files = fs.readdirSync(clientBuildPath);
+    console.log('Files in client-build:', files);
+}
+else {
+    console.error('Client build directory does NOT exist at:', clientBuildPath);
+}
 app.use(express_1.default.static(clientBuildPath, {
     dotfiles: 'ignore',
     etag: false,
@@ -111,10 +135,6 @@ app.use(express_1.default.static(clientBuildPath, {
         res.set('x-timestamp', Date.now().toString());
     }
 }));
-// Health check endpoint (moved up)
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -159,6 +179,9 @@ const startServer = async () => {
             await Admin_1.Admin.sync();
             await Service_1.Service.sync();
             await Appointment_1.Appointment.sync();
+            await Newsletter_1.Newsletter.sync();
+            await Gallery_1.Gallery.sync();
+            await Subscriber_1.Subscriber.sync();
             console.log('Database synchronized.');
             // Check if default admin exists, if not create one
             const adminCount = await Admin_1.Admin.count();
