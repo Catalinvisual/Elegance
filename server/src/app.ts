@@ -199,12 +199,23 @@ const startServer = async () => {
       console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
     }
     
+    console.log('🔥 STARTING SERVER LISTEN...');
+    console.log(`📡 Port: ${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🎯 Bind address: 0.0.0.0:${PORT}`);
+    
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🎉 Server is running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
       console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);
       console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
+      console.log('✅ SERVER STARTUP COMPLETE - READY FOR HEALTHCHECKS!');
     });
+    
+    // Adaugăm un interval să verificăm că serverul ascultă
+    setInterval(() => {
+      console.log(`💓 Server heartbeat - Port ${PORT} - ${new Date().toISOString()}`);
+    }, 10000);
   } catch (error) {
     console.error('Critical server error:', error);
     process.exit(1);
