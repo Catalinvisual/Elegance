@@ -1,8 +1,8 @@
 # Nixpacks configuration for Railway deployment
-# This configuration installs all dependencies (including dev) for build
+# Updated to use Node.js 20 (Node.js 18 is EOL)
 
 [phases.setup]
-nixPkgs = ["nodejs_18", "npm", "python3"]
+nixPkgs = ["nodejs_20", "npm", "python3"]
 
 [phases.install]
 cmds = [
