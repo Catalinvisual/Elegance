@@ -115,7 +115,7 @@ app.use((req, res, next) => {
 // This serves index.html for any route that doesn't match API or static files
 app.use((req, res) => {
   console.log('Catch-all handler for:', req.path);
-  const indexPath = path.join(__dirname, '../../client-build', 'index.html');
+  const indexPath = path.join(__dirname, '../client-build', 'index.html');
   console.log('Sending index.html from:', indexPath);
   res.sendFile(indexPath, (err) => {
     if (err) {
