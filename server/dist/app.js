@@ -131,28 +131,34 @@ app.use((req, res) => {
 // Database connection and server start
 const startServer = async () => {
     try {
-        await database_1.sequelize.authenticate();
-        console.log('Database connection established successfully.');
-        // Initialize all models - use sync() without alter to prevent infinite loops
-        await Client_1.Client.sync();
-        await Admin_1.Admin.sync();
-        await Service_1.Service.sync();
-        await Appointment_1.Appointment.sync();
-        console.log('Database synchronized.');
-        // Check if default admin exists, if not create one
-        const adminCount = await Admin_1.Admin.count();
-        if (adminCount === 0) {
-            const bcrypt = await Promise.resolve().then(() => __importStar(require('bcryptjs')));
-            const defaultPassword = await bcrypt.hash('admin123', 10);
-            await Admin_1.Admin.create({
-                email: 'admin@beautysalon.com',
-                password: defaultPassword,
-                firstName: 'Admin',
-                lastName: 'User',
-                role: 'admin',
-                isActive: true
-            });
-            console.log('Default admin user created (admin@beautysalon.com / admin123)');
+        try {
+            await database_1.sequelize.authenticate();
+            console.log('Database connection established successfully.');
+            // Initialize all models - use sync() without alter to prevent infinite loops
+            await Client_1.Client.sync();
+            await Admin_1.Admin.sync();
+            await Service_1.Service.sync();
+            await Appointment_1.Appointment.sync();
+            console.log('Database synchronized.');
+            // Check if default admin exists, if not create one
+            const adminCount = await Admin_1.Admin.count();
+            if (adminCount === 0) {
+                const bcrypt = await Promise.resolve().then(() => __importStar(require('bcryptjs')));
+                const defaultPassword = await bcrypt.hash('admin123', 10);
+                await Admin_1.Admin.create({
+                    email: 'admin@beautysalon.com',
+                    password: defaultPassword,
+                    firstName: 'Admin',
+                    lastName: 'User',
+                    role: 'admin',
+                    isActive: true
+                });
+                console.log('Default admin user created (admin@beautysalon.com / admin123)');
+            }
+        }
+        catch (dbError) {
+            console.error('Database connection failed, but starting server anyway:', dbError);
+            console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
         }
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
@@ -160,7 +166,7 @@ const startServer = async () => {
         });
     }
     catch (error) {
-        console.error('Unable to start server:', error);
+        console.error('Critical server error:', error);
         process.exit(1);
     }
 };
