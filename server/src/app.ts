@@ -23,6 +23,14 @@ import newsletterRoutes from './routes/newsletter';
 
 dotenv.config();
 
+// LOGGING MASIV PENTRU RAILWAY DEBUGGING
+console.log('🔥🔥🔥 APP.TS PORNIT - RAILWAY DEBUGGING 🔥🔥🔥');
+console.log('📅 Data pornire:', new Date().toISOString());
+console.log('📂 __dirname:', __dirname);
+console.log('📂 process.cwd():', process.cwd());
+console.log('🔧 TOATE variabilele de mediu:', Object.keys(process.env).sort());
+console.log('🌐 PROCESS.ENV COMPLET:', process.env);
+
 const app = express();
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
@@ -199,11 +207,19 @@ const startServer = async () => {
       console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
     }
 
+    console.log(`🚀 PORNIRE SERVER - ÎNAINTE DE app.listen()`);
+    console.log(`📍 Port: ${PORT}, Host: 0.0.0.0`);
+    
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🎉 Server is running on port ${PORT}`);        
       console.log(`🌍 Environment: ${process.env.NODE_ENV}`);     
       console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);     
       console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
+      
+      // Heartbeat pentru debugging
+      setInterval(() => {
+        console.log(`💓 SERVER ALIVE - Port: ${PORT} - Time: ${new Date().toISOString()}`);
+      }, 10000);
     });
   } catch (error) {
     console.error('Critical server error:', error);
