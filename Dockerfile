@@ -52,9 +52,9 @@ RUN echo "=== DEBUGGING COMPLET STRUCTURA CONTAINERULUI ===" && \
     echo "" && \
     echo "=== SFÂRȘIT DEBUGGING ==="
 
-WORKDIR /app/server
+WORKDIR /app
 
 # Comandă de start cu debugging complet
-CMD ["./debug-start.sh"]
+CMD ["./server/railway-start.sh"]
 
 EXPOSE 5000
