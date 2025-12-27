@@ -68,11 +68,21 @@ app.use('/api/newsletters', newsletterRoutes);
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
-// Serve static files from React app in production
-if (process.env.NODE_ENV === 'production') {
-  // Serve static files from the React app
-  app.use(express.static(path.join(__dirname, '../client-build')));
-}
+// Serve static files from React app in production - FORCE SERVING ALWAYS
+// Serve static files first, with correct path resolution
+const clientBuildPath = path.join(__dirname, '../client-build');
+console.log('Serving static files from:', clientBuildPath);
+app.use(express.static(clientBuildPath, { 
+  dotfiles: 'ignore',
+  etag: false,
+  extensions: ['html', 'htm'],
+  index: ['index.html'],
+  maxAge: '1d',
+  redirect: false,
+  setHeaders: function (res, path, stat) {
+    res.set('x-timestamp', Date.now().toString());
+  }
+}));
 
 // Health check endpoint (moved up)
 app.get('/api/health', (req, res) => {
@@ -101,23 +111,17 @@ app.use((req, res, next) => {
   }
 });
 
-// If we got here in production, it means it's a non-API route that wasn't handled by static files
-// So we should return index.html for React Router to handle
-if (process.env.NODE_ENV === 'production') {
-  // Use a regex-safe middleware instead of app.get('*') to avoid PathError
-  app.use((req, res, next) => {
-    if (req.method === 'GET') {
-      res.sendFile(path.join(__dirname, '../client-build', 'index.html'));
-    } else {
-      next();
+// Catch-all handler for React Router - SIMPLIFIED FOR DEMO
+// This serves index.html for any route that doesn't match API or static files
+app.use((req, res) => {
+  console.log('Catch-all handler for:', req.path);
+  res.sendFile(path.join(__dirname, '../client-build', 'index.html'), (err) => {
+    if (err) {
+      console.error('Error sending index.html:', err);
+      res.status(404).json({ message: 'Frontend not found' });
     }
   });
-} else {
-  // Development 404
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Route not found' });
-  });
-}
+});
 
 // Database connection and server start
 const startServer = async () => {
