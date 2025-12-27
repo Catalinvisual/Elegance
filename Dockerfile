@@ -55,7 +55,8 @@ RUN echo "=== DEBUGGING COMPLET STRUCTURA CONTAINERULUI ===" && \
 
 WORKDIR /app
 
-# Comandă de start cu debugging complet
-CMD ["./server/railway-start.sh"]
+# Comandă de start cu debugging complet - V2 cu maximum logging
+# Încercăm mai întâi scriptul nostru detaliat, dacă nu merge, folosim direct node
+CMD ["/bin/bash", "-c", "echo '🚀 Starting Railway deployment...' && ls -la /app/server/ && echo 'Attempting to run railway-start-v2.sh...' && ./server/railway-start-v2.sh || echo '❌ Script failed, trying direct node...' && cd /app/server && node dist/app.js"
 
 EXPOSE 5000

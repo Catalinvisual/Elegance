@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Railway startup script v2 - maximum debugging
 
 echo "🚀 BEAUTY SALON SERVER - RAILWAY PRODUCTION MODE V2"
