@@ -202,6 +202,11 @@ app.use((req, res) => {
 });
 
 // Database connection and server start
+console.log('🔥🔥🔥 PORNIRE STARTSERVER() - ÎNAINTE DE TOT 🔥🔥🔥');
+console.log('🔥 PORT:', PORT);
+console.log('🔥 HOST: 0.0.0.0');
+console.log('🔥 Vom apela app.listen() imediat...');
+
 const startServer = async () => {
   try {
     console.log('🚀 Starting server initialization...');
@@ -246,17 +251,29 @@ const startServer = async () => {
 
     console.log(`🚀 PORNIRE SERVER - ÎNAINTE DE app.listen()`);
     console.log(`📍 Port: ${PORT}, Host: 0.0.0.0`);
+    console.log(`🎯 TIP: app.listen() VA FI APELAT ACUM!`);
     
     app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉`);
+      console.log(`🎉 SERVER PORNIT CU SUCCES!`);
       console.log(`🎉 Server is running on port ${PORT}`);        
       console.log(`🌍 Environment: ${process.env.NODE_ENV}`);     
       console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);     
       console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
+      console.log(`🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉`);
       
       // Heartbeat pentru debugging
       setInterval(() => {
         console.log(`💓 SERVER ALIVE - Port: ${PORT} - Time: ${new Date().toISOString()}`);
       }, 10000);
+    });
+    
+    process.on('uncaughtException', (error) => {
+      console.error('🚨 UNCAUGHT EXCEPTION:', error);
+    });
+    
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('🚨 UNHANDLED REJECTION:', reason, 'Promise:', promise);
     });
   } catch (error) {
     console.error('Critical server error:', error);

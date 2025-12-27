@@ -1,14 +1,14 @@
-# DOCKERFILE NUCLEAR PENTRU RAILWAY - 100% LOGGING
+# DOCKERFILE ULTRA-FORȚAT PENTRU RAILWAY - VA AFISA ABSOLUT TOT
 FROM node:20-alpine
 
-# Instalăm utilități esențiale
+# Instalăm bash pentru scripturi complexe
 RUN apk add --no-cache curl net-tools bash
 
 WORKDIR /app
 
-# Copiem scriptul de start FORȚAT
-COPY railway-start.sh ./
-RUN chmod +x railway-start.sh
+# Copiem scriptul FORȚAT
+COPY railway-start-forced.sh ./
+RUN chmod +x railway-start-forced.sh
 
 # Copiem fișierele de configurare
 COPY server/package*.json ./server/
@@ -20,18 +20,22 @@ RUN cd server && npm ci --only=production
 # Copiem codul compilat
 COPY server/dist ./server/dist
 
-# Verificăm fișierele critice
-RUN echo "=== VERIFICARE FINALĂ ===" && \
-    ls -la server/dist/ && \
-    test -f server/dist/app.js && echo "✅ app.js EXISTA" || echo "❌ app.js LIPSESTE" && \
-    test -x railway-start.sh && echo "✅ Script start executabil" || echo "❌ Script start NEEXECUTABIL"
+# Verificare EXTREMĂ a fișierelor
+RUN echo "🔥🔥🔥 VERIFICARE EXTREMA 🔥🔥🔥" && \
+    echo "📁 Director curent: $(pwd)" && \
+    echo "📁 Conținut /app: $(ls -la)" && \
+    echo "📁 Conținut server: $(ls -la server/)" && \
+    echo "📁 Conținut server/dist: $(ls -la server/dist/)" && \
+    test -f server/dist/app.js && echo "✅✅✅ APP.JS EXISTA!" || echo "❌❌❌ APP.JS LIPSESTE!" && \
+    test -x railway-start-forced.sh && echo "✅✅✅ SCRIPT EXECUTABIL!" || echo "❌❌❌ SCRIPT NEEXECUTABIL!"
 
-# Healthcheck robust
+# Healthcheck cu logging
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
   CMD echo "=== HEALTHCHECK RULAT ===" && \
-      echo "Port: ${PORT:-5000}" && \
       echo "Time: $(date)" && \
-      curl -f -v http://localhost:${PORT:-5000}/api/health && echo "✅ HEALTH SUCCESS" || echo "❌ HEALTH FAILED"
+      echo "Port: ${PORT:-5000}" && \
+      echo "Attempting healthcheck..." && \
+      curl -f -v http://localhost:${PORT:-5000}/api/health && echo "✅ HEALTH SUCCESS" || (echo "❌ HEALTH FAILED"; exit 1)
 
-# FOLOSIM SCRIPTUL FORȚAT - Railway NU poate ignora asta
-CMD ["./railway-start.sh"]
+# FOLOSIM SCRIPTUL FORȚAT - Railway VA FI OBLIGAT SĂ-L RULEZE
+CMD ["./railway-start-forced.sh"]
