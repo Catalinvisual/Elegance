@@ -1,22 +1,18 @@
 # Nixpacks configuration for Railway deployment
-# Updated to use Node.js 20 (Node.js 18 is EOL)
+# Simplified configuration for Node.js 20
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "npm", "python3"]
+nixPkgs = ["nodejs_20", "npm"]
 
 [phases.install]
 cmds = [
-  "echo 'Installing client dependencies...'",
-  "cd client && npm install --include=dev",
-  "echo 'Installing server dependencies...'",
-  "cd server && npm install --include=dev"
+  "cd client && npm install",
+  "cd server && npm install"
 ]
 
 [phases.build]
 cmds = [
-  "echo 'Building client...'",
   "cd client && npm run build",
-  "echo 'Building server...'",
   "cd server && npm run build"
 ]
 
