@@ -24,7 +24,7 @@ import newsletterRoutes from './routes/newsletter';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 
 // Security middleware
 app.use(helmet({
@@ -152,9 +152,14 @@ app.use((req, res) => {
 // Database connection and server start
 const startServer = async () => {
   try {
+    console.log('🚀 Starting server initialization...');
+    console.log(`📡 Port: ${PORT}`);
+    console.log(`🔧 Environment: ${process.env.NODE_ENV}`);
+    console.log(`💾 Database URL: ${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}`);
+    
     try {
       await sequelize.authenticate();
-      console.log('Database connection established successfully.');
+      console.log('✅ Database connection established successfully.');
       
       // Initialize all models - use sync() without alter to prevent infinite loops
       await Client.sync();
@@ -187,9 +192,11 @@ const startServer = async () => {
       console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
     }
     
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🎉 Server is running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+      console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);
+      console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
     });
   } catch (error) {
     console.error('Critical server error:', error);

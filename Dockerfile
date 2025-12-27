@@ -2,8 +2,8 @@
 
 FROM node:20-alpine
 
-# Instalăm utilități de debugging
-RUN apk add --no-cache net-tools curl bash
+# Instalăm utilități de debugging și curl pentru health checks
+RUN apk add --no-cache net-tools curl bash procps
 
 WORKDIR /app
 
@@ -23,6 +23,7 @@ COPY client/build ./client-build
 # Setăm variabilele de mediu pentru Railway
 ENV NODE_ENV=production
 ENV PORT=5000
+ENV HOST=0.0.0.0
 
 # Debugging complet - verificăm TOT
 RUN echo "=== DEBUGGING COMPLET STRUCTURA CONTAINERULUI ===" && \

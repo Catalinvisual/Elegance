@@ -60,7 +60,7 @@ const gallery_1 = __importDefault(require("./routes/gallery"));
 const newsletter_1 = __importDefault(require("./routes/newsletter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 // Security middleware
 app.use((0, helmet_1.default)({
     contentSecurityPolicy: false, // Disable CSP to avoid React issues
@@ -171,9 +171,13 @@ app.use((req, res) => {
 // Database connection and server start
 const startServer = async () => {
     try {
+        console.log('🚀 Starting server initialization...');
+        console.log(`📡 Port: ${PORT}`);
+        console.log(`🔧 Environment: ${process.env.NODE_ENV}`);
+        console.log(`💾 Database URL: ${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}`);
         try {
             await database_1.sequelize.authenticate();
-            console.log('Database connection established successfully.');
+            console.log('✅ Database connection established successfully.');
             // Initialize all models - use sync() without alter to prevent infinite loops
             await Client_1.Client.sync();
             await Admin_1.Admin.sync();
@@ -203,9 +207,11 @@ const startServer = async () => {
             console.error('Database connection failed, but starting server anyway:', dbError);
             console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
         }
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-            console.log(`Environment: ${process.env.NODE_ENV}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`🎉 Server is running on port ${PORT}`);
+            console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+            console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);
+            console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
         });
     }
     catch (error) {
