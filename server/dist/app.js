@@ -13,6 +13,7 @@ console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
 const app = (0, express_1.default)();
 const PORT = parseInt(process.env.PORT || '5000', 10);
 console.log('🚀 PORT final:', PORT);
+console.log('🔥 RAILWAY PORT REAL:', process.env.PORT || 'Folosim 5000 default');
 // DOAR HEALTHCHECK - ATÂT!
 app.get('/api/health', (req, res) => {
     console.log('🩺 HEALTHCHECK HIT!');

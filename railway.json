@@ -5,6 +5,7 @@
   },
   "deploy": {
     "healthcheckPath": "/api/health",
-    "healthcheckTimeout": 30
+    "healthcheckTimeout": 30,
+    "port": "${{PORT}}"
   }
 }
