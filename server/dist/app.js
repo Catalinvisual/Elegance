@@ -128,8 +128,14 @@ app.use((req, res, next) => {
 // If we got here in production, it means it's a non-API route that wasn't handled by static files
 // So we should return index.html for React Router to handle
 if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) => {
-        res.sendFile(path_1.default.join(__dirname, '../client-build', 'index.html'));
+    // Use a regex-safe middleware instead of app.get('*') to avoid PathError
+    app.use((req, res, next) => {
+        if (req.method === 'GET') {
+            res.sendFile(path_1.default.join(__dirname, '../client-build', 'index.html'));
+        }
+        else {
+            next();
+        }
     });
 }
 else {
