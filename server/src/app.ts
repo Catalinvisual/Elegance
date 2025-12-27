@@ -92,8 +92,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // BUT it should NOT intercept the frontend in production
 
 // Only use this 404 handler for API routes that weren't matched
-app.use('/api/*', (req, res) => {
-  res.status(404).json({ message: 'API Route not found' });
+// Use a regex-safe middleware instead of path string with wildcard
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    res.status(404).json({ message: 'API Route not found' });
+  } else {
+    next();
+  }
 });
 
 // If we got here in production, it means it's a non-API route that wasn't handled by static files
