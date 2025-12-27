@@ -9,6 +9,7 @@ WORKDIR /app/server
 # Copiem și pornim - nimic altceva
 COPY server/package*.json ./
 COPY server/dist ./dist
+COPY server/client-build ./client-build
 
 RUN npm ci --only=production
 

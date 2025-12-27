@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config();
 console.log('🔥🔥🔥 RAILWAY DEBUG: APP.TS PORNIT! 🔥🔥🔥');
 console.log('📅 Data:', new Date().toISOString());
@@ -18,14 +19,63 @@ const HOST = process.env.HOST || '0.0.0.0';
 console.log('🚀 PORT final:', PORT);
 console.log('🌐 HOST final:', HOST);
 console.log('🔥 RAILWAY PORT REAL:', process.env.PORT || 'Folosim 8080 default');
-// 🔥 SERVIM FRONTEND-UL REACT CONSTRUIT!
+// 🔥 VERIFICĂM DACĂ CLIENT-BUILD EXISTĂ
 const clientBuildPath = path_1.default.join(__dirname, '..', 'client-build');
-console.log('📁 Client build path:', clientBuildPath);
+console.log('📁 Client build path absolut:', clientBuildPath);
+try {
+    const files = fs_1.default.readdirSync(clientBuildPath);
+    console.log('📂 Fișiere găsite în client-build:', files);
+    const indexPath = path_1.default.join(clientBuildPath, 'index.html');
+    if (fs_1.default.existsSync(indexPath)) {
+        console.log('✅ index.html există!');
+        const indexContent = fs_1.default.readFileSync(indexPath, 'utf8');
+        console.log('📄 Primele 200 caractere din index.html:', indexContent.substring(0, 200));
+    }
+    else {
+        console.log('❌ index.html NU există!');
+    }
+}
+catch (error) {
+    console.log('❌ EROARE la citirea client-build:', error.message);
+    console.log('🔍 Verificăm directorul curent:', __dirname);
+    // Încercăm și alte path-uri posibile
+    const altPaths = [
+        path_1.default.join(__dirname, 'client-build'),
+        path_1.default.join(process.cwd(), 'client-build'),
+        '/app/server/client-build',
+        path_1.default.join(__dirname, '..', 'client-build')
+    ];
+    altPaths.forEach(altPath => {
+        try {
+            if (fs_1.default.existsSync(altPath)) {
+                console.log(`✅ Path alternativ găsit: ${altPath}`);
+                const files = fs_1.default.readdirSync(altPath);
+                console.log(`📂 Fișiere în ${altPath}:`, files);
+            }
+            else {
+                console.log(`❌ Path alternativ NU există: ${altPath}`);
+            }
+        }
+        catch (e) {
+            console.log(`❌ Eroare la path ${altPath}:`, e.message);
+        }
+    });
+}
+// 🔥 SERVIM FRONTEND-UL REACT CONSTRUIT!
 app.use(express_1.default.static(clientBuildPath));
 // 🔥 RUTA ROOT - SERVIM INDEX.HTML
 app.get('/', (req, res) => {
     console.log('🌍 ROOT HIT - SERVING INDEX.HTML!');
-    res.sendFile(path_1.default.join(clientBuildPath, 'index.html'));
+    const indexPath = path_1.default.join(clientBuildPath, 'index.html');
+    console.log('📄 Încercăm să servim:', indexPath);
+    if (fs_1.default.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+        console.log('✅ INDEX.HTML SERVIT CU SUCCES!');
+    }
+    else {
+        console.log('❌ INDEX.HTML NU EXISTĂ! Returnăm eroare.');
+        res.status(404).json({ error: 'index.html not found', path: indexPath });
+    }
 });
 // 🔥 HEALTHCHECK - RĂMÂNE PENTRU ADMIN/RAILWAY
 app.get('/api/health', (req, res) => {
@@ -35,7 +85,8 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString(),
         port: PORT,
         host: HOST,
-        env: process.env.NODE_ENV
+        env: process.env.NODE_ENV,
+        clientBuildExists: fs_1.default.existsSync(clientBuildPath)
     });
 });
 console.log('🔥 ÎNAINTE DE app.listen()...');
