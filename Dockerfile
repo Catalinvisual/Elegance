@@ -8,9 +8,8 @@ RUN cd server && npm install
 COPY server ./server
 RUN cd server && npm run build
 
-# Copiere client build în locația corectă
-RUN mkdir -p ./server/client-build
-COPY client/build ./server/client-build
+# Copiere client build în ROOT (nu în server)
+COPY client/build ./client-build
 
 EXPOSE 5000
 

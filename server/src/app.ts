@@ -68,10 +68,10 @@ app.use('/api/newsletters', newsletterRoutes);
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
-// Serve static files from React app in production - FORCE SERVING ALWAYS
-// Serve static files first, with correct path resolution
-const clientBuildPath = path.join(__dirname, '../client-build');
+// Serve static files from React app - CORECTAT PENTRU STRUCTURA DOCKER
+const clientBuildPath = path.join(__dirname, '../../client-build');
 console.log('Serving static files from:', clientBuildPath);
+console.log('__dirname:', __dirname);
 app.use(express.static(clientBuildPath, { 
   dotfiles: 'ignore',
   etag: false,
@@ -111,14 +111,16 @@ app.use((req, res, next) => {
   }
 });
 
-// Catch-all handler for React Router - SIMPLIFIED FOR DEMO
+// Catch-all handler for React Router - CORECTAT PENTRU STRUCTURA DOCKER
 // This serves index.html for any route that doesn't match API or static files
 app.use((req, res) => {
   console.log('Catch-all handler for:', req.path);
-  res.sendFile(path.join(__dirname, '../client-build', 'index.html'), (err) => {
+  const indexPath = path.join(__dirname, '../../client-build', 'index.html');
+  console.log('Sending index.html from:', indexPath);
+  res.sendFile(indexPath, (err) => {
     if (err) {
       console.error('Error sending index.html:', err);
-      res.status(404).json({ message: 'Frontend not found' });
+      res.status(404).json({ message: 'Frontend not found', error: err.message });
     }
   });
 });
