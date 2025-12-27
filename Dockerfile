@@ -4,17 +4,17 @@ FROM node:20-alpine
 # Instalăm curl pentru healthcheck
 RUN apk add --no-cache curl
 
-WORKDIR /app
+WORKDIR /app/server
 
 # Copiem și pornim - nimic altceva
-COPY server/package*.json ./server/
-COPY server/dist ./server/dist
+COPY server/package*.json ./
+COPY server/dist ./dist
 
-RUN cd server && npm ci --only=production
+RUN npm ci --only=production
 
 # HEALTHCHECK pentru Railway
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
   CMD curl -f http://localhost:5000/api/health || exit 1
 
 # Cel mai simplu CMD posibil
-CMD node server/dist/app.js
+CMD node dist/app.js
