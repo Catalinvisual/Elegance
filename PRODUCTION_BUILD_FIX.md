@@ -25,8 +25,14 @@ Am implementat mai multe metode de build pentru a preveni ciclul infinit:
 ## Utilizare
 
 ### Railway Deployment (Recomandat)
+Railway va folosi automat configurația Nixpacks (`nixpacks.toml`) sau Railway JSON (`railway.json`).
+
+**Notă importantă:** Dacă întâlniți eroarea `npm ci can only install with an existing package-lock.json`, asigurați-vă că:
+1. Fișierele `package-lock.json` există în directorul `client` și `server`
+2. Sunt incluse în repository (nu sunt în `.gitignore`)
+3. Configurația Nixpacks folosește `--omit=dev` în loc de `--only=production`
+
 ```bash
-# Railway va folosi automat nixpacks.toml sau railway.json
 git push origin master
 ```
 

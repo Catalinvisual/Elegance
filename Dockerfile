@@ -3,7 +3,7 @@ FROM node:18-alpine AS client-builder
 
 WORKDIR /app/client
 COPY client/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 COPY client/ ./
 RUN npm run build
@@ -13,7 +13,7 @@ FROM node:18-alpine AS server-builder
 
 WORKDIR /app/server
 COPY server/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 COPY server/ ./
 RUN npm run build
@@ -35,7 +35,7 @@ COPY --from=client-builder /app/client/build ./client/build
 COPY package*.json ./
 
 # Install production dependencies for server only
-RUN cd server && npm ci --only=production --omit=dev
+RUN cd server && npm ci --omit=dev
 
 # Create uploads directory
 RUN mkdir -p uploads/gallery uploads/services
