@@ -36,11 +36,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// LOGGING IMEDIAT - să vedem că aplicația pornește
-console.log('🚨 APPLICATION STARTING - FIRST LINE OF CODE');
-console.log('📅 Timestamp:', new Date().toISOString());
-console.log('📁 __dirname:', __dirname);
-console.log('📄 __filename:', __filename);
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
@@ -83,7 +78,7 @@ const limiter = (0, express_rate_limit_1.default)({
     max: 1000 // Increased limit for debugging
 });
 app.use(limiter);
-// CORS configuration - Allow all for debugging/production fix
+// CORS configuration - Allow all for debugging/production fix    
 app.use((0, cors_1.default)({
     origin: true, // Allow all origins
     credentials: true
@@ -156,7 +151,7 @@ app.use((err, req, res, next) => {
 });
 // 404 handler - catch-all must be the LAST middleware
 // BUT it should NOT intercept the frontend in production
-// Only use this 404 handler for API routes that weren't matched
+// Only use this 404 handler for API routes that weren't matched  
 // Use a regex-safe middleware instead of path string with wildcard
 app.use((req, res, next) => {
     if (req.path.startsWith('/api/')) {
@@ -218,21 +213,12 @@ const startServer = async () => {
             console.error('Database connection failed, but starting server anyway:', dbError);
             console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
         }
-        console.log('🔥 STARTING SERVER LISTEN...');
-        console.log(`📡 Port: ${PORT}`);
-        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-        console.log(`🎯 Bind address: 0.0.0.0:${PORT}`);
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🎉 Server is running on port ${PORT}`);
             console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
             console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);
             console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
-            console.log('✅ SERVER STARTUP COMPLETE - READY FOR HEALTHCHECKS!');
         });
-        // Adaugăm un interval să verificăm că serverul ascultă
-        setInterval(() => {
-            console.log(`💓 Server heartbeat - Port ${PORT} - ${new Date().toISOString()}`);
-        }, 10000);
     }
     catch (error) {
         console.error('Critical server error:', error);
