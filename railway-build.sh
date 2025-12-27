@@ -1,28 +1,24 @@
 #!/bin/bash
-# Railway build script - prevents build loops
+# Railway build script - includes dev dependencies for build
 
-echo "🚀 Starting Railway production build..."
+echo "Starting Railway build..."
 
-# Install dependencies
-echo "📦 Installing dependencies..."
+# Install ALL dependencies (including dev) for build
+echo "Installing client dependencies..."
 cd client
-npm ci --omit=dev
-cd ..
+npm install
 
-cd server  
-npm ci --omit=dev
-cd ..
+echo "Installing server dependencies..."
+cd ../server
+npm install
 
-# Build client
-echo "🏗️ Building client..."
-cd client
+# Build applications
+echo "Building client..."
+cd ../client
 npm run build
-cd ..
 
-# Build server
-echo "⚙️ Building server..."
-cd server
+echo "Building server..."
+cd ../server
 npm run build
-cd ..
 
-echo "✅ Railway build completed successfully!"
+echo "Build completed successfully!"

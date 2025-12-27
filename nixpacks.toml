@@ -1,13 +1,13 @@
 # Nixpacks configuration for Railway deployment
-# This prevents build loops by specifying exact build steps
+# This configuration installs all dependencies (including dev) for build
 
 [phases.setup]
 nixPkgs = ["nodejs_18", "npm"]
 
 [phases.install]
 cmds = [
-  "cd client && npm ci --omit=dev",
-  "cd server && npm ci --omit=dev"
+  "cd client && npm install",
+  "cd server && npm install"
 ]
 
 [phases.build]
