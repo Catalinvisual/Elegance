@@ -46,7 +46,7 @@ COPY --from=server-builder /app/server/node_modules ./server/node_modules
 # Copy client build files
 COPY --from=client-builder /app/client/build ./client/build
 
-# Copy root package.json
+# Copy root package files
 COPY package.json package-lock.json ./
 
 # Create uploads directory
