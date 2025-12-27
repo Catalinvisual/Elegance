@@ -26,6 +26,12 @@ dotenv.config();
 const app = express();
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
+console.log('=== SERVER STARTUP DEBUG ===');
+console.log('PORT environment:', process.env.PORT);
+console.log('PORT parsed:', PORT);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP to avoid React issues
@@ -58,6 +64,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
+  console.log('🩺 Health check requested!');
   res.status(200).json({ 
     status: 'healthy', 
     timestamp: new Date().toISOString(),

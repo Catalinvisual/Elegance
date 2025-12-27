@@ -3,7 +3,7 @@
 FROM node:20-alpine
 
 # Instalăm utilități de debugging și curl pentru health checks
-RUN apk add --no-cache net-tools curl bash procps
+RUN apk add --no-cache net-tools curl bash procps coreutils
 
 WORKDIR /app
 
@@ -16,7 +16,8 @@ COPY server/dist ./server/dist
 COPY server/package.json ./server/package.json
 COPY server/debug-start.sh ./server/debug-start.sh
 COPY server/railway-start.sh ./server/railway-start.sh
-RUN chmod +x ./server/debug-start.sh ./server/railway-start.sh
+COPY server/railway-start-v2.sh ./server/railway-start-v2.sh
+RUN chmod +x ./server/debug-start.sh ./server/railway-start.sh ./server/railway-start-v2.sh
 
 # Copiem clientul construit
 COPY client/build ./client-build
