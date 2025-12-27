@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "start": "npm run server:start",
-    "build": "npm run client:build && npm run server:build",
+    "build": "cd client && npm install && npm run build && cd ../server && npm install && npm run build",
     "build:prod": "powershell -ExecutionPolicy Bypass -File build.ps1",
     "build:docker": "docker build -t beauty-salon-app .",
     "server:dev": "cd server && npm run dev",
