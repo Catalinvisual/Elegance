@@ -100,12 +100,8 @@ app.use('/uploads', express_1.default.static('uploads'));
 if (process.env.NODE_ENV === 'production') {
     // Serve static files from the React app
     app.use(express_1.default.static(path_1.default.join(__dirname, '../client-build')));
-    // Handle React routing - catch-all for SPA
-    app.use((req, res) => {
-        res.sendFile(path_1.default.join(__dirname, '../client-build', 'index.html'));
-    });
 }
-// Health check endpoint
+// Health check endpoint (moved up)
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
@@ -117,10 +113,25 @@ app.use((err, req, res, next) => {
         error: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
 });
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ message: 'Route not found' });
+// 404 handler - catch-all must be the LAST middleware
+// BUT it should NOT intercept the frontend in production
+// Only use this 404 handler for API routes that weren't matched
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ message: 'API Route not found' });
 });
+// If we got here in production, it means it's a non-API route that wasn't handled by static files
+// So we should return index.html for React Router to handle
+if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+        res.sendFile(path_1.default.join(__dirname, '../client-build', 'index.html'));
+    });
+}
+else {
+    // Development 404
+    app.use((req, res) => {
+        res.status(404).json({ message: 'Route not found' });
+    });
+}
 // Database connection and server start
 const startServer = async () => {
     try {
