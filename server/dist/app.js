@@ -107,8 +107,8 @@ app.use('/uploads', express_1.default.static('uploads'));
 if (process.env.NODE_ENV === 'production') {
     // Serve static files from the React app
     app.use(express_1.default.static(path_1.default.join(__dirname, '../client-build')));
-    // Handle React routing, return all requests to React app
-    app.get('*', (req, res) => {
+    // Handle React routing - catch-all for SPA
+    app.use((req, res) => {
         res.sendFile(path_1.default.join(__dirname, '../client-build', 'index.html'));
     });
 }
