@@ -1,3 +1,9 @@
+// LOGGING IMEDIAT - să vedem că aplicația pornește
+console.log('🚨 APPLICATION STARTING - FIRST LINE OF CODE');
+console.log('📅 Timestamp:', new Date().toISOString());
+console.log('📁 __dirname:', __dirname);
+console.log('📄 __filename:', __filename);
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
