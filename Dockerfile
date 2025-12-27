@@ -10,4 +10,5 @@ RUN cd server && npm run build
 
 EXPOSE 5000
 
-CMD ["node", "server/dist/app.js"]
+WORKDIR /app/server
+CMD ["node", "dist/app.js"]
