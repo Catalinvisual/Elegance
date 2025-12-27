@@ -15,7 +15,8 @@ RUN cd server && npm ci --only=production
 COPY server/dist ./server/dist
 COPY server/package.json ./server/package.json
 COPY server/debug-start.sh ./server/debug-start.sh
-RUN chmod +x ./server/debug-start.sh
+COPY server/railway-start.sh ./server/railway-start.sh
+RUN chmod +x ./server/debug-start.sh ./server/railway-start.sh
 
 # Copiem clientul construit
 COPY client/build ./client-build
