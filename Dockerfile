@@ -1,17 +1,17 @@
-# Dockerfile ULTRA-SIMPLU - fără ENTRYPOINT, doar CMD
+# Dockerfile ULTRA-SIMPLU - WORKDIR /app/server
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /app/server
 
-# Copiem serverul
-COPY server/package*.json ./server/
-COPY server/dist ./server/dist
+# Copiem serverul direct în directorul de lucru
+COPY server/package*.json ./
+COPY server/dist ./dist
 
 # Instalăm dependențele
-RUN cd server && npm ci --only=production
+RUN npm ci --only=production
 
 # EXPUNEM portul
 EXPOSE 5000
 
-# Comandă ULTRA-SIMPLĂ
-CMD ["node", "server/dist/app.js"]
+# Comandă ULTRA-SIMPLĂ - suntem deja în /app/server
+CMD ["node", "dist/app.js"]
