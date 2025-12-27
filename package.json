@@ -7,13 +7,16 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "start": "npm run server:start",
     "build": "npm run client:build && npm run server:build",
+    "build:prod": "powershell -ExecutionPolicy Bypass -File build.ps1",
+    "build:docker": "docker build -t beauty-salon-app .",
     "server:dev": "cd server && npm run dev",
     "server:start": "cd server && npm start",
     "server:build": "cd server && npm run build",
     "client:dev": "cd client && npm start",
     "client:build": "cd client && npm run build",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "heroku-postbuild": "npm run install:all && npm run build"
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
   },
   "keywords": [
     "beauty-salon",
