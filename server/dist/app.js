@@ -36,6 +36,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// LOGGING IMEDIAT - să vedem că aplicația pornește
+console.log('🚨 APPLICATION STARTING - FIRST LINE OF CODE');
+console.log('📅 Timestamp:', new Date().toISOString());
+console.log('📁 __dirname:', __dirname);
+console.log('📄 __filename:', __filename);
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
@@ -213,12 +218,21 @@ const startServer = async () => {
             console.error('Database connection failed, but starting server anyway:', dbError);
             console.warn('The application is running in "Offline Mode" (No Database). API endpoints requiring DB will fail.');
         }
+        console.log('🔥 STARTING SERVER LISTEN...');
+        console.log(`📡 Port: ${PORT}`);
+        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+        console.log(`🎯 Bind address: 0.0.0.0:${PORT}`);
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🎉 Server is running on port ${PORT}`);
             console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
             console.log(`📍 Listening on: http://0.0.0.0:${PORT}`);
             console.log(`💓 Health check available at: http://0.0.0.0:${PORT}/api/health`);
+            console.log('✅ SERVER STARTUP COMPLETE - READY FOR HEALTHCHECKS!');
         });
+        // Adaugăm un interval să verificăm că serverul ascultă
+        setInterval(() => {
+            console.log(`💓 Server heartbeat - Port ${PORT} - ${new Date().toISOString()}`);
+        }, 10000);
     }
     catch (error) {
         console.error('Critical server error:', error);
