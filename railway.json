@@ -11,10 +11,8 @@
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 60,
     "sleepApplication": false,
-    "numReplicas": 1
-  },
-  "environments": {
-    "production": {
+    "numReplicas": 1,
+    "env": {
       "NODE_ENV": "production",
       "PORT": "5000"
     }
