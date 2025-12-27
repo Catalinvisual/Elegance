@@ -43,6 +43,9 @@ console.log('🎯 RAILWAY variables:', {
 const app = express();
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
+console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥');
+console.log('🔥🔥🔥 APP.TS ÎNCEPE EXECUȚIA! 🔥🔥🔥');
+console.log('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥');
 console.log('=== SERVER STARTUP DEBUG ===');
 console.log('PORT environment:', process.env.PORT);
 console.log('PORT parsed:', PORT);
