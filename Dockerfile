@@ -2,20 +2,34 @@
 FROM node:18-alpine AS client-builder
 
 WORKDIR /app/client
-COPY client/package*.json ./
+
+# Copy package files first
+COPY client/package.json client/package-lock.json ./
+
+# Install dependencies
 RUN npm ci --omit=dev
 
+# Copy source code
 COPY client/ ./
+
+# Build the client
 RUN npm run build
 
 # Stage 2: Build server
 FROM node:18-alpine AS server-builder
 
 WORKDIR /app/server
-COPY server/package*.json ./
+
+# Copy package files first
+COPY server/package.json server/package-lock.json ./
+
+# Install dependencies
 RUN npm ci --omit=dev
 
+# Copy source code
 COPY server/ ./
+
+# Build the server
 RUN npm run build
 
 # Stage 3: Production image
@@ -25,17 +39,15 @@ WORKDIR /app
 
 # Copy server files
 COPY --from=server-builder /app/server/dist ./server/dist
-COPY --from=server-builder /app/server/package*.json ./server/
+COPY --from=server-builder /app/server/package.json ./server/package.json
+COPY --from=server-builder /app/server/package-lock.json ./server/package-lock.json
 COPY --from=server-builder /app/server/node_modules ./server/node_modules
 
 # Copy client build files
 COPY --from=client-builder /app/client/build ./client/build
 
 # Copy root package.json
-COPY package*.json ./
-
-# Install production dependencies for server only
-RUN cd server && npm ci --omit=dev
+COPY package.json package-lock.json ./
 
 # Create uploads directory
 RUN mkdir -p uploads/gallery uploads/services
