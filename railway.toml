@@ -1,6 +1,5 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "bash railway-build.sh"
 
 [deploy]
 startCommand = "cd server && npm start"

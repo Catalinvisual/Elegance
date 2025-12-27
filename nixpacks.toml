@@ -2,17 +2,21 @@
 # This configuration installs all dependencies (including dev) for build
 
 [phases.setup]
-nixPkgs = ["nodejs_18", "npm"]
+nixPkgs = ["nodejs_18", "npm", "python3"]
 
 [phases.install]
 cmds = [
-  "cd client && npm install",
-  "cd server && npm install"
+  "echo 'Installing client dependencies...'",
+  "cd client && npm install --include=dev",
+  "echo 'Installing server dependencies...'",
+  "cd server && npm install --include=dev"
 ]
 
 [phases.build]
 cmds = [
+  "echo 'Building client...'",
   "cd client && npm run build",
+  "echo 'Building server...'",
   "cd server && npm run build"
 ]
 
