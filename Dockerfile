@@ -14,7 +14,7 @@ RUN npm ci --only=production
 
 # HEALTHCHECK pentru Railway
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-  CMD curl -f http://localhost:5000/api/health || exit 1
+  CMD curl -f http://localhost:8080/api/health || exit 1
 
 # Cel mai simplu CMD posibil
 CMD node dist/app.js

@@ -12,11 +12,11 @@ console.log('🎯 PORT din process.env:', process.env.PORT);
 console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌐 HOST din process.env:', process.env.HOST);
 const app = (0, express_1.default)();
-const PORT = parseInt(process.env.PORT || '5000', 10);
+const PORT = parseInt(process.env.PORT || '8080', 10); // 🔥 SCHIMBAT LA 8080!
 const HOST = process.env.HOST || '0.0.0.0';
 console.log('🚀 PORT final:', PORT);
 console.log('🌐 HOST final:', HOST);
-console.log('🔥 RAILWAY PORT REAL:', process.env.PORT || 'Folosim 5000 default');
+console.log('🔥 RAILWAY PORT REAL:', process.env.PORT || 'Folosim 8080 default');
 // DOAR HEALTHCHECK - ATÂT!
 app.get('/api/health', (req, res) => {
     console.log('🩺 HEALTHCHECK HIT!');
