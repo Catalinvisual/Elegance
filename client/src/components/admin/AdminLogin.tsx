@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, Mail, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, Sparkles, ArrowLeft } from 'lucide-react';
 
 interface AdminLoginProps {
   onLogin?: (token: string) => void;
@@ -65,6 +65,16 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
         className="w-full max-w-md"
       >
         <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="flex items-center mb-8">
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center text-neutral-600 hover:text-neutral-800 transition-colors"
+              title="Go back to homepage"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              <span className="text-sm">Back to Home</span>
+            </button>
+          </div>
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0 }}
