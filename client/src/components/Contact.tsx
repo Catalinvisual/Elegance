@@ -114,7 +114,7 @@ const Contact: React.FC = () => {
             {/* Map */}
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2435.123456789!2d5.748440979328!3d52.748440979328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c8b5b5b5b5b5b5%3A0xd134e199a405a163!2sEmmeloord%2C%20Netherlands!5e0!3m2!1sen!2snl!4v1635959040739!5m2!1sen!2snl"
+                src="https://maps.google.com/maps?q=Emmeloord,Netherlands&t=&z=13&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
