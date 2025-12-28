@@ -13,7 +13,8 @@ console.log('🌐 HOST din process.env:', process.env.HOST);
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '8080', 10);
-const HOST = process.env.HOST || '0.0.0.0';
+// FORCE 0.0.0.0 to ensure external access in Docker/Railway
+const HOST = '0.0.0.0';
 
 console.log('🚀 PORT final:', PORT);
 console.log('🌐 HOST final:', HOST);
