@@ -114,15 +114,20 @@ const Contact: React.FC = () => {
             {/* Map */}
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19456.789!2d5.728!3d52.710!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c887eb7e9f0421%3A0xb5be45c8beacb060!2sEmmeloord%2C%20Netherlands!5e0!3m2!1sen!2snl"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=5.7081%2C52.6912%2C5.7881%2C52.7312&amp;layer=mapnik&amp;marker=52.7112%2C5.7481"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
                 allowFullScreen={true}
                 loading="lazy"
                 className="w-full h-64"
-                title="Google Maps - Location of Beauty Salon in Emmeloord, Netherlands"
+                title="Location of Beauty Salon in Emmeloord, Netherlands"
               ></iframe>
+              <div className="bg-white p-2 text-xs text-center border-t">
+                <a href="https://www.openstreetmap.org/?mlat=52.7112&amp;mlon=5.7481#map=13/52.7112/5.7481" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                  View larger map
+                </a>
+              </div>
             </div>
           </motion.div>
 
