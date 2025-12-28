@@ -113,17 +113,15 @@ const Contact: React.FC = () => {
 
             {/* Map */}
             <div className="rounded-2xl overflow-hidden shadow-lg">
-              <iframe
-                key="map-emmeloord-v1"
-                src="https://maps.google.com/maps?q=Emmeloord%2C%20Netherlands&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="300"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-                className="w-full h-64"
-                title="Location of Beauty Salon in Emmeloord, Netherlands"
-              ></iframe>
+              <iframe 
+                width="100%" 
+                height="300" 
+                frameBorder="0" 
+                scrolling="no" 
+                marginHeight={0} 
+                marginWidth={0} 
+                src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=Emmeloord,%20Netherlands+(Elegance%20Studio)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+              </iframe>
             </div>
           </motion.div>
 
