@@ -15,7 +15,8 @@ console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
 console.log('🌐 HOST din process.env:', process.env.HOST);
 const app = (0, express_1.default)();
 const PORT = parseInt(process.env.PORT || '8080', 10);
-const HOST = process.env.HOST || '0.0.0.0';
+// FORCE 0.0.0.0 to ensure external access in Docker/Railway
+const HOST = '0.0.0.0';
 console.log('🚀 PORT final:', PORT);
 console.log('🌐 HOST final:', HOST);
 console.log('🔥 RAILWAY PORT REAL:', process.env.PORT || 'Folosim 8080 default');
@@ -91,7 +92,8 @@ app.get('/api/health', (req, res) => {
 });
 // 🔥 CATCH-ALL PENTRU SPA (REACT ROUTER)
 // Orice rută care nu e API sau fișier static va returna index.html
-app.get('*', (req, res) => {
+// Express 5: wildcard-ul trebuie să aibă un nume de parametru
+app.get('*path', (req, res) => {
     console.log(`🌍 CATCH-ALL HIT: ${req.url} - SERVING INDEX.HTML!`);
     const indexPath = path_1.default.join(clientBuildPath, 'index.html');
     if (fs_1.default.existsSync(indexPath)) {

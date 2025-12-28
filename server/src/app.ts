@@ -96,7 +96,8 @@ app.get('/api/health', (req, res) => {
 
 // 🔥 CATCH-ALL PENTRU SPA (REACT ROUTER)
 // Orice rută care nu e API sau fișier static va returna index.html
-app.get('/*', (req, res) => {
+// Express 5: wildcard-ul trebuie să aibă un nume de parametru
+app.get('*path', (req, res) => {
   console.log(`🌍 CATCH-ALL HIT: ${req.url} - SERVING INDEX.HTML!`);
   const indexPath = path.join(clientBuildPath, 'index.html');
   
