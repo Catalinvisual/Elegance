@@ -114,7 +114,7 @@ const Contact: React.FC = () => {
             {/* Map */}
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=5.7081%2C52.6912%2C5.7881%2C52.7312&amp;layer=mapnik&amp;marker=52.7112%2C5.7481"
+                src="https://maps.google.com/maps?q=52.7112,5.7481&hl=en&z=14&output=embed"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
@@ -123,11 +123,6 @@ const Contact: React.FC = () => {
                 className="w-full h-64"
                 title="Location of Beauty Salon in Emmeloord, Netherlands"
               ></iframe>
-              <div className="bg-white p-2 text-xs text-center border-t">
-                <a href="https://www.openstreetmap.org/?mlat=52.7112&amp;mlon=5.7481#map=13/52.7112/5.7481" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
-                  View larger map
-                </a>
-              </div>
             </div>
           </motion.div>
 
