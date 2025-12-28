@@ -93,6 +93,20 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// 🔥 CATCH-ALL PENTRU SPA (REACT ROUTER)
+// Orice rută care nu e API sau fișier static va returna index.html
+app.get('*', (req, res) => {
+  console.log(`🌍 CATCH-ALL HIT: ${req.url} - SERVING INDEX.HTML!`);
+  const indexPath = path.join(clientBuildPath, 'index.html');
+  
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    console.log('❌ INDEX.HTML NU EXISTĂ! Returnăm eroare.');
+    res.status(404).json({ error: 'index.html not found', path: indexPath });
+  }
+});
+
 console.log('🔥 ÎNAINTE DE app.listen()...');
 
 app.listen(PORT, HOST, () => {
